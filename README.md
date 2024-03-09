@@ -45,7 +45,7 @@ Data structures and algorithms
 
 
 # LinkList
-> *!!! Code that be contained in the Readme.md may not be the latest version*
+> *!!! Code that be contained in the README.md may not be the latest version*
 ### Definition
 ```c++
 template<typename Node_t>
@@ -174,5 +174,5 @@ SOFTWARE.
 
 # Contact
 If you have any questions or suggestions, feel free to contact me at my email: 
-* *<cenxuantian@yeah.net>*
-* *<cenxuan.tian@outlook.com>*
+<br>
+*<cenxuan.tian@outlook.com>*
