@@ -98,7 +98,7 @@ public:
     }
 
     // O(n) !!!
-    LinkList(std::initializer_list<T> const& _ini_list):root_(nullptr),size_(0),last_(0){
+    LinkList(std::initializer_list<T> const& _ini_list) noexcept:root_(nullptr),size_(0),last_(0){
         for(const auto&i :_ini_list){
             push_back(i);
         }
