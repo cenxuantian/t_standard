@@ -46,6 +46,21 @@ Data structures and algorithms
 
 # LinkList
 > *!!! Code that be contained in the README.md may not be the latest version*
+* [Definition](#definition)
+* [Type Definition](#type-definition)
+* [Constructors](#constructors)
+* [Operators](#operators)
+    * [move asign](#Move-assign)
+    * [Access to the items](#access-to-the-items)
+* [Public functions](#public-functions)
+    * [Clone or change the ownership](#clone-or-change-the-ownership)
+    * [Access to the items](#access-to-the-items-1)
+    * [Modify the item](#modify-the-item)
+    * [Give](#give)
+* [Other functions](#other-functions)
+
+
+***
 ### Definition
 ```c++
 template<typename Node_t>
@@ -67,24 +82,25 @@ LinkList(LinkList&& _other)noexcept;
 LinkList(std::initializer_list<T> const& _ini_list) noexcept;
 ```
 
-### operators
+### Operators
+#### Move assign
 ```C++
 LinkList& operator=(LinkList&& _other) noexcept;
 ```
-Access to the items
+#### Access to the items
 ```C++
 T& operator[](usize _pos);
 T const& operator[](usize _pos) const;
 ```
 
 ### Public functions
-Clone or change the ownership
+#### Clone or change the ownership
 ```C++
 LinkList copy() const noexcept requires(std::is_copy_constructible_v<T>);
 
 virtual LinkList&& move() noexcept;
 ```
-Access to the items
+#### Access to the items
 ```C++
 LinkListIter<Node_t> begin() noexcept;
 LinkListIterConst<Node_t> begin()const noexcept;
@@ -108,9 +124,10 @@ LinkListIterConst<Node_t> find(T const& _tar) const noexcept requires(__is_eq_co
 
 LinkListIter<Node_t> last() noexcept;
 LinkListIterConst<Node_t> last() const noexcept;
-
 ```
-Modify the item
+
+
+#### Modify the item
 ```C++
 // modify the head or tail
 
@@ -130,7 +147,7 @@ template<typename ...Args> requires(__is_DoubleNode_t<Node_t>) void insert_front
 template<typename IterType> bool erase(IterType&& _iter) noexcept requires(__is_DoubleNode_t<Node_t>);
 ```
 
-**Give**
+#### Give
 > Give functions are designed to move a node from one LinkList to another Link list (also supports from self to self)
 ```C++
 template<typename IterType_1 , typename IterType_2> void give_to_front(IterType_1&& from_this, IterType_2&& to_other) requires(__is_DoubleNode_t<Node_t>);
@@ -141,7 +158,7 @@ template<typename IterType_1 , typename IterType_2> void give_to_back(IterType_1
 template<typename IterType_1 , typename IterType_2> static void swap(IterType_1&& _1, IterType_2&& _2)
 ```
 
-Other functions
+#### Other functions
 ```C++
 usize size() const noexcept;
 ```
