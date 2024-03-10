@@ -7,7 +7,14 @@ Data structures and algorithms
 * Contains lock-free atomic classes for multi-threading programming *(unfinished)*
 
 # Menu
-### **Classes**
+### **Meta functions & structs & constexprs**
+* [t_meta.hpp](#t_meta\.hpp)
+
+### **Algorithms**
+* [t_math.hpp](#t_meta\.hpp) : math functions
+* [t_sort.hpp](#t_meta\.hpp) : sort functions
+
+### **Template Classes**
 * ### basic classes
     * [NonMoveable](#NonMoveable) : interface for non-moveable classes
     * [NonCopyable](#NonCopyable) : interface for non-copyable classes
@@ -36,12 +43,7 @@ Data structures and algorithms
     * [AtomicQueue](#AtomicQueue) *(unfinished)*
     * [AtomicStack](#AtomicStack) *(unfinished)*
 
-* ### **Meta functions & structs & constexprs**
-    * [t_meta.hpp](#t_meta\.hpp)
 
-* ### **Algorithms**
-    * [t_math.hpp](#t_meta\.hpp) : math functions
-    * [t_sort.hpp](#t_meta\.hpp) : sort functions
 
 # NonMoveable
 ### Definition (NonMoveable)
