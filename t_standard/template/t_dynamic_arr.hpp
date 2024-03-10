@@ -68,14 +68,14 @@ template<typename T>
 class DynamicArr:public NonCopyble{
 public:
     using ContentType = T;
-
+    // default constructor
     DynamicArr() noexcept 
     :data_(nullptr),space_(0){}
     
     ~DynamicArr() noexcept {
         __shrink_to_zero();
     }
-
+    // move constructor
     DynamicArr(DynamicArr && _other) noexcept
     :data_(_other.data_)
     ,space_(_other.space_)
@@ -106,14 +106,14 @@ public:
     virtual DynamicArr<T>&& move() noexcept{
         return std::move(*this);
     }
-
+    // construct by c array
     DynamicArr(const T* _data,usize _space)noexcept 
     :data_(nullptr),space_(_space)
     {
         data_ = new T[_space];
         memcpy(data_,_data,_space);
     }
-
+    // construct by initializer_list
     DynamicArr(std::initializer_list<T> const& _ini_list) noexcept
     :data_(new T[_ini_list.size()]),space_(_ini_list.size())
     {

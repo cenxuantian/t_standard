@@ -42,18 +42,22 @@ public:
         return std::move(*this);
     }
 
+    // get the size of valid data
     const usize size() const noexcept{
         return data_size_;
     }
 
+    // get the size of space allocated
     const usize capability() const noexcept{
         return this->space_;
     }
 
+    // modify the capability
     void reserve_by(usize _size) noexcept{
         this->__space_grow(_size);
     }
 
+    // modify the capability
     void reserve_to(usize _size) {
         if(this->space_ < _size){
             this->__space_grow(_size - this->space_);
@@ -98,12 +102,14 @@ public:
         return *this;
     }
 
+    // push back
     template<typename _InputType>
     requires( std::is_same_v<_InputType,ArrBuffer<T>> || std::is_base_of_v<ArrBuffer<byte>,T>) 
     ArrBuffer& operator+=(_InputType const& _in_data) noexcept{
         return this->push_back(_in_data);
     }
 
+    // push back reture new object
     template<typename _InputType>
     requires( std::is_same_v<_InputType,ArrBuffer<T>> || std::is_base_of_v<ArrBuffer<byte>,T>)
     ArrBuffer operator+(_InputType const& _in_data) noexcept{
@@ -205,6 +211,8 @@ public:
         return {*this,_pos};
     }
 
+    // just get the view of an item
+    // then move the iter forward
     const T* view_and_move_forward(DynamicArrIter<T>& _iter, usize _size) {
         const T* res = this->data_ + _iter.pos_;
         if(_iter.pos_+_size >= this->data_size_){
