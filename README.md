@@ -3,8 +3,10 @@ Data structures and algorithms based on C++ 20 standard
 > *!!! Code that be contained in the README.md may not be the latest version*
 
 ## Features
+* Head-only
 * All classes are designed non-copyable
 * Contains lock-free atomic classes for multi-threading programming *(unfinished)*
+
 
 # Menu
 ### **Meta functions & structs & constexprs**
