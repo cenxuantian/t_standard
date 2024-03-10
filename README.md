@@ -1,5 +1,5 @@
 # t_standard
-Data structures and algorithms
+Data structures and algorithms based on C++ 20 standard
 > *!!! Code that be contained in the README.md may not be the latest version*
 
 ## Features
