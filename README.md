@@ -1,6 +1,6 @@
 # t_standard
 Data structures and algorithms based on C++ 20 standard
-> *!!! Code that be contained in the README.md may not be the latest version*
+> *!!! Code that is contained in the README.md may not be the latest version*
 
 ## Features
 * Head-only
@@ -30,7 +30,7 @@ Data structures and algorithms based on C++ 20 standard
                 * [ByteStream](#ByteStream) : stream type with some operators
     * [SingleNode](#SingleNode)
     * [DoubleNode](#DoubleNode)
-    * [LinkList](#LinkList) : fast and realiable LinkList template class
+    * [LinkList](#LinkList) : fast and reliable LinkList template class
         * [List](#List) : DoubleNode LinkList
         * [Queue](#Queue) : SingleNode LinkList
         * [Stack](#Stack) : SingleNode LinkList
@@ -81,7 +81,7 @@ template<typename T,usize _s> using FixedArr = T[_s];
 ### Definition (DynamicArr)
 ```C++
 template<typename T>
-class DynamicArr:public NonCopyble;
+class DynamicArr: public NonCopyble;
 ```
 
 ### Type Definition (DynamicArr)
@@ -143,9 +143,9 @@ const usize size() const noexcept;
 ***
 ### Definition (ArrBuffer)
 ```C++
-// this class can grow up and reserve size by itself
+// This class can grow up and reserve size by itself
 template<typename T>
-class ArrBuffer :public DynamicArr<T>;
+class ArrBuffer: public DynamicArr<T>;
 ```
 ### Constructors (ArrBuffer)
 ```C++
@@ -158,10 +158,10 @@ ArrBuffer(DynamicArr<T>&& _other)noexcept;
 ### Public functions (ArrBuffer)
 #### Size (ArrBuffer)
 ```C++
-// get the size of valid data
+// Get the size of valid data
 const usize size() const noexcept;
 
-// get the size of space allocated
+// Get the size of space allocated
 const usize capability() const noexcept;
 
 // modify the capability
@@ -174,7 +174,7 @@ void reserve_to(usize _size);
 ```C++
 DynamicArrIter<T> seek(usize _pos) noexcept;
 
-// just get the view of an item
+// Just get the view of an item
 // then move the iter forward
 const T* view_and_move_forward(DynamicArrIter<T>& _iter, usize _size);
 ```
@@ -192,7 +192,7 @@ template<typename _InputType>
 requires( std::is_same_v<_InputType,ArrBuffer<T>> ||  std::is_base_of_v<ArrBuffer<byte>,T>) 
 ArrBuffer& operator+=(_InputType const& _in_data) noexcept;
 
-// push back reture new object
+// push back a new object
 template<typename _InputType>
 requires( std::is_same_v<_InputType,ArrBuffer<T>> || std::is_base_of_v<ArrBuffer<byte>,T>)
 ArrBuffer operator+(_InputType const& _in_data) noexcept;
@@ -302,7 +302,7 @@ LinkListIterConst<Node_t> last() const noexcept;
 
 #### Modify items  (LinkList)
 ```C++
-// modify the head or tail
+// Modify the head or tail
 
 // push
 template<typename ...Args> void push_back(Args&& ... _data);
@@ -341,11 +341,11 @@ usize size() const noexcept;
 
 
 # AtomicRingQueue
-> Thread Safe ring buffer, which can only be modified in the head and tail. If the buffer is full, the data in the head will be overwriten.
+> Thread Safe ring buffer, which can only be modified in the head and tail. If the buffer is full, the data in the head will be overwritten.
 ### Definition (AtomicRingQueue)
 ```C++
 template<typename _Type,size_t _Size>
-class AtomicRingQueue:public NonCopyble;
+class AtomicRingQueue: public NonCopyble;
 ```
 
 ### Public functions (AtomicRingQueue)
@@ -356,17 +356,17 @@ size_t safe_pop_pos() noexcept;
 _Type safe_pop(size_t pos) noexcept;
 
 // this function can only get the current size
-// if other thread called push or safe_pop_pos
-// the size could be different
+// If other thread has called "push" or "safe_pop_pos" function
+// The size could be different
 size_t size()const noexcept;
 
 size_t capacity()const noexcept;
 
 void clear() noexcept;
 
-// this function will not really clear the data,
-// it will just change the marks of head and tail position
-// so this function is fast
+// This function will not really clear the data.
+// It will just change the marks of the head and tail position
+// So this function is fast
 void clear() noexcept;
 ```
 
@@ -374,17 +374,17 @@ void clear() noexcept;
 ```C++
 // create the object
 AtomicRingQueue<int,100> q;
-// push something into the queue
+// Push something into the queue
 q.push(1);
 
 // try to pop
 auto pos = q.safe_pop_pos();
-// check if the pos is right
+// Check if the pos is right
 if(pos!=0ULL){
-    // read the data out
+    // Read the data out
     int front = q.safe_pop(pos);
 }else{
-    // the queue is empty currently
+    // The queue is empty currently
 }
 ```
 
