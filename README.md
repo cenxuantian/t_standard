@@ -342,6 +342,12 @@ usize size() const noexcept;
 
 # AtomicRingQueue
 > Thread Safe ring buffer, which can only be modified in the head and tail. If the buffer is full, the data in the head will be overwriten.
+### Definition (AtomicRingQueue)
+```C++
+template<typename _Type,size_t _Size>
+class AtomicRingQueue:public NonCopyble;
+```
+
 ### Public functions (AtomicRingQueue)
 ```C++
 void push(_Type const& _in_ldata);
