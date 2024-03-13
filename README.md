@@ -341,7 +341,39 @@ usize size() const noexcept;
 
 
 # AtomicRingQueue
-> Thread Safe ring buffer, which can just be modified in the head and tail. If the buffer is full, the data in the head will be overwriten.
+> Thread Safe ring buffer, which can only be modified in the head and tail. If the buffer is full, the data in the head will be overwriten.
+### Public functions (AtomicRingQueue)
+```C++
+void push(_Type const& _in_ldata);
+
+size_t safe_pop_pos() noexcept;
+_Type safe_pop(size_t pos) noexcept;
+
+// this function can only get the current size
+// if other thread called push or safe_pop_pos
+// the size could be different
+size_t size()const noexcept;
+
+size_t capacity()const noexcept;
+
+void clear() noexcept;
+
+// this function will not really clear the data,
+// it will just change the marks of head and tail position
+// so this function is fast
+void clear() noexcept;
+```
+
+### Examples
+```C++
+AtomicRingQueue<int,100> q;
+q.push(1);
+auto pos = q.safe_pop_pos();
+if(pos!=0ULL){
+    int front = q.pop();
+}
+```
+
 
 # License
 MIT License

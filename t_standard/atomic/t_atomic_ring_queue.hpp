@@ -41,14 +41,21 @@ public:
         return std::move(data[pos]);
     }
     
+    // this function can only get the current size
+    // if other thread called push or safe_pop_pos
+    // the size could be different
     size_t size()const noexcept{
         return impl.load().cur_size;
     }
     
+    // get the capasity
     size_t capacity()const noexcept{
         return _Size;
     }
-    
+
+    // this function will not really clear the data,
+    // it will just change the marks of head and tail position
+    // so this function is fast
     void clear() noexcept{
         impl.store(_AtomicRingQueueImpl());
     }
