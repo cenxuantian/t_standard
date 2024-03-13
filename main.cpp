@@ -17,8 +17,20 @@
 using namespace tcx;
 
 int main(int, char**){
+    // create the object
     AtomicRingQueue<int,100> q;
-    
+    // push something into the queue
+    q.push(1);
+
+    // try to pop
+    auto pos = q.safe_pop_pos();
+    // check if the pos is right
+    if(pos!=0ULL){
+        // read the data out
+        int front = q.safe_pop(pos);
+    }else{
+        // the queue is empty currently
+    }
 
     return 0;
 

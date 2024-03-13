@@ -364,13 +364,21 @@ void clear() noexcept;
 void clear() noexcept;
 ```
 
-### Examples
+### Examples (AtomicRingQueue)
 ```C++
+// create the object
 AtomicRingQueue<int,100> q;
+// push something into the queue
 q.push(1);
+
+// try to pop
 auto pos = q.safe_pop_pos();
+// check if the pos is right
 if(pos!=0ULL){
-    int front = q.pop();
+    // read the data out
+    int front = q.safe_pop(pos);
+}else{
+    // the queue is empty currently
 }
 ```
 

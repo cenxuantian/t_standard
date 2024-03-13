@@ -37,6 +37,12 @@ public:
         return _atomic_pop_pos();
     }
     
+    // this function is safe, but if the queue size is not enough
+    // the data that have been read could be wrong
+    // because, if other threads write the buffer so fast,
+    // data on this pos might be overwriten
+    // so if you use this data struct, you need to avoid the situation
+    // of small size
     _Type safe_pop(size_t pos) noexcept {
         return std::move(data[pos]);
     }
