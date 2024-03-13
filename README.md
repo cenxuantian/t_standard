@@ -41,8 +41,9 @@ Data structures and algorithms based on C++ 20 standard
     * [LinkListIterConst](#LinkListIterConst)
 
 * ### Atomic classes
-    * [AtomicNode](#AtomicNode) *(unfinished)*
+    * [AtomicRingQueue](#AtomicRingQueue) Thread Safe ring buffer
     * [AtomicQueue](#AtomicQueue) *(unfinished)*
+    * [AtomicNode](#AtomicNode) *(unfinished)*
     * [AtomicStack](#AtomicStack) *(unfinished)*
 
 
@@ -335,6 +336,12 @@ template<typename IterType_1 , typename IterType_2> static void swap(IterType_1&
 usize size() const noexcept;
 ```
 
+
+
+
+
+# AtomicRingQueue
+> Thread Safe ring buffer, which can just be modified in the head and tail. If the buffer is full, the data in the head will be overwriten.
 
 # License
 MIT License

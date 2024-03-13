@@ -12,15 +12,13 @@
 #include <algorithm/t_math.hpp>
 #include <algorithm/t_sort.hpp>
 #include <atomic/t_atomic_queue.hpp>
-
+#include <atomic/t_atomic_ring_queue.hpp>
 
 using namespace tcx;
 
-
-
 int main(int, char**){
-    AtomicQueue<int> q;
-
+    AtomicRingQueue<int,100> q;
+    
 
     return 0;
 
