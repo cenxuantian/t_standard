@@ -1,6 +1,6 @@
 #pragma once
-#include "t_class_helper.h"
-#include "t_meta.h"
+#include "../basic/t_class_helper.h"
+#include "./basic/t_meta.h"
 namespace tcx
 {
 template<typename T1,typename T2>

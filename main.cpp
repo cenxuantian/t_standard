@@ -8,7 +8,7 @@
 #include <template/t_queue.hpp>
 #include <template/t_list.hpp>
 #include <template/t_stack.hpp>
-#include <basic/t_pair.hpp>
+#include <utility/t_pair.hpp>
 #include <algorithm/t_math.hpp>
 #include <algorithm/t_sort.hpp>
 #include <atomic/t_atomic_queue.hpp>
