@@ -9,28 +9,37 @@
 #include <template/t_list.hpp>
 #include <template/t_stack.hpp>
 #include <utility/t_pair.hpp>
+#include <utility/t_bit.hpp>
 #include <algorithm/t_math.hpp>
 #include <algorithm/t_sort.hpp>
 #include <atomic/t_atomic_queue.hpp>
 #include <atomic/t_atomic_ring_queue.hpp>
+#include <template/t_search_binary_tree.hpp>
 
 using namespace tcx;
 
 int main(int, char**){
     // create the object
-    AtomicRingQueue<int,100> q;
-    // push something into the queue
-    q.push(1);
+    SearchBinaryTree<int> t;
+    t.emplace(10);
+    t.emplace(8);
+    t.emplace(11);
+    t.emplace(50);
+    t.emplace(12);
+    t.emplace(1);
+    t.emplace(22);
 
-    // try to pop
-    auto pos = q.safe_pop_pos();
-    // check if the pos is right
-    if(pos!=0ULL){
-        // read the data out
-        int front = q.safe_pop(pos);
-    }else{
-        // the queue is empty currently
-    }
+    auto t2 = t.copy();
+    t.mid_traverse([](int const& each){
+        std::cout << each<<'\n';
+    });
+    t2.mid_traverse([](int const& each){
+        std::cout << each<<'\n';
+    });
+
+    // t.post_traverse([](int const& each){
+    //     std::cout << each<<'\n';
+    // });
 
     return 0;
 
