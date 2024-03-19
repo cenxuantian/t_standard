@@ -1,35 +1,16 @@
 #pragma once
 
 #include <functional>
-#include <coroutine>
+#include "../basic/t_coroutine.hpp"
 #include "t_node.hpp"
 
 namespace tcx
 {
 
 template<typename T>
-class NormalCoroutine{
-public:
-    struct promise_type{
-        NormalCoroutine get_return_object(){
-            return NormalCoroutine(std::coroutine_handle<promise_type>::from_promise(*this));
-        }
-        auto initial_suspend()noexcept {return std::suspend_never{};};
-        auto final_suspend()noexcept {return std::suspend_always{};};
-        auto yield_value()noexcept{return std::suspend_never{};}
-        void return_value() noexcept{}
-        void unhandled_exception(){}
-    };
-
-    std::coroutine_handle<promise_type> handle;
-    explicit NormalCoroutine(std::coroutine_handle<promise_type> const& h):handle(h){}
-    ~NormalCoroutine(){handle.destroy();}
-};
-
-template<typename T>
 class SearchBinaryTreeIter {
 public:
-    SearchBinaryTreeIter(BinaryTreeNode<T>* start, NormalCoroutine<T>(*coro_ini_func)(BinaryTreeNode<T>*, void*))
+    SearchBinaryTreeIter(BinaryTreeNode<T>* start, OnlyInitSusCoro<T>(*coro_ini_func)(BinaryTreeNode<T>*, void*))
     noexcept :co_(coro_ini_func(start,this)),cur_(nullptr){};
 
     SearchBinaryTreeIter<T>& operator++(){
@@ -44,13 +25,13 @@ public:
     }
     BinaryTreeNode<T>* cur_;
 private:
-    NormalCoroutine<T> co_;
+    OnlyInitSusCoro<T> co_;
 };
 
 template<typename T>
 class SearchBinaryTreeConstIter {
 public:
-    SearchBinaryTreeConstIter(BinaryTreeNode<T>* start, NormalCoroutine<T>(*coro_ini_func)(BinaryTreeNode<T>*, void*))
+    SearchBinaryTreeConstIter(BinaryTreeNode<T>* start, OnlyInitSusCoro<T>(*coro_ini_func)(BinaryTreeNode<T>*, void*))
     noexcept :co_(coro_ini_func(start,this)),cur_(nullptr){};
 
     SearchBinaryTreeConstIter<T>& operator++(){
@@ -65,7 +46,7 @@ public:
     }
     const BinaryTreeNode<T>* cur_;
 private:
-    NormalCoroutine<T> co_;
+    OnlyInitSusCoro<T> co_;
 };
 
 // normal traverse functions
@@ -162,7 +143,7 @@ void __LSRP_traverse(BinaryTreeNode<T>* node, std::function<void(BinaryTreeNode<
 
 // left -> self -> right -> parent
 template<typename T,bool _traverse_lchild, bool _traverse_rchild, bool _traverse_parent>
-NormalCoroutine<T> __co_LSRP_traverse(BinaryTreeNode<T>* node, void* _ctx){
+OnlyInitSusCoro<T> __co_LSRP_traverse(BinaryTreeNode<T>* node, void* _ctx){
     if(node){
         // left
         if constexpr (_traverse_lchild){
@@ -203,7 +184,7 @@ NormalCoroutine<T> __co_LSRP_traverse(BinaryTreeNode<T>* node, void* _ctx){
 
 // right -> self -> left -> parent
 template<typename T,bool _traverse_lchild, bool _traverse_rchild, bool _traverse_parent>
-NormalCoroutine<T> __co_RSLP_traverse(BinaryTreeNode<T>* node, void* _ctx){
+OnlyInitSusCoro<T> __co_RSLP_traverse(BinaryTreeNode<T>* node, void* _ctx){
     if(node){
         // right
         if constexpr (_traverse_rchild){

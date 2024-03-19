@@ -10,16 +10,18 @@ Data structures and algorithms based on C++ 20 standard
 
 # Menu
 ### **Meta functions & structs & constexprs**
-* [t_meta.hpp](#t_meta\.hpp)
+* [t_meta.hpp](#t_meta\.hpp) : Useful meta funtions and variables
+* [t_coroutine.hpp](#t_coroutine.hpp) : Useful Coroutine templates
 
 ### **Algorithms**
 * [t_math.hpp](#t_meta\.hpp) : math functions
 * [t_sort.hpp](#t_meta\.hpp) : sort functions
 
-### **Template Classes**
+### **Classes**
 * ### basic classes
     * [NonMoveable](#NonMoveable) : interface for non-moveable classes
     * [NonCopyable](#NonCopyable) : interface for non-copyable classes
+    * [t_bit.hpp](#t_bit.hpp) : contains useful bit structures and unions
 
 * ### Template classes
     * [FixedArr](#FixedArr) : simple fixed sized array type
@@ -30,12 +32,16 @@ Data structures and algorithms based on C++ 20 standard
                 * [ByteStream](#ByteStream) : stream type with some operators
     * [SingleNode](#SingleNode)
     * [DoubleNode](#DoubleNode)
+    * [BinaryTreeNode](#BinaryTreeNode)
     * [LinkList](#LinkList) : fast and reliable LinkList template class
         * [List](#List) : DoubleNode LinkList
         * [Queue](#Queue) : SingleNode LinkList
         * [Stack](#Stack) : SingleNode LinkList
+    * [SearchBinaryTree](#SearchBinaryTree) : Binary Search Tree / Ordered list
+
 
 * ### Iter classes
+    * [t_tree_iter.hpp](#t_tree_iter.hpp) : C++ 20 Coroutine based iter
     * [t_iter_traits.hpp](#t_iter_traits.hpp)
     * [LinkListIter](#LinkListIter)
     * [LinkListIterConst](#LinkListIterConst)
@@ -338,6 +344,29 @@ usize size() const noexcept;
 
 
 
+
+# SearchBinaryTree
+> Ordered list
+
+#### Access to items  (SearchBinaryTree)
+```C++
+SearchBinaryTreeIter<T> begin();
+SearchBinaryTreeIter<T> end() noexcept;
+SearchBinaryTreeConstIter<T> begin() const;
+SearchBinaryTreeConstIter<T> end()  const noexcept;
+SearchBinaryTreeIter<T> rbegin();
+SearchBinaryTreeIter<T> rend() noexcept;
+SearchBinaryTreeConstIter<T> rbegin() const;
+SearchBinaryTreeConstIter<T> rend()  const noexcept;
+const T& min() const noexcept;
+const T& max() const noexcept;
+void inc_traverse(std::function<void(T&)> const& func);
+void inc_traverse(std::function<void(T const&)> const& func) const;
+void dec_traverse(std::function<void(T&)> const& func);
+void dec_traverse(std::function<void(T const&)> const& func) const;
+void root_traverse(std::function<void(T&)> const& func);
+void root_traverse(std::function<void(T const&)> const& func) const;
+```
 
 
 # AtomicRingQueue

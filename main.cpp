@@ -29,13 +29,9 @@ int main(int, char**){
     t.emplace(1);
     t.emplace(22);
 
-    auto t2 = t.copy();
-    t.mid_traverse([](int const& each){
-        std::cout << each<<'\n';
-    });
-    t2.mid_traverse([](int const& each){
-        std::cout << each<<'\n';
-    });
+    for(const auto & i : t){
+        std::cout << i <<' ';
+    }
 
     // t.post_traverse([](int const& each){
     //     std::cout << each<<'\n';

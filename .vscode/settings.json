@@ -50,6 +50,7 @@
         "typeinfo": "cpp",
         "cstring": "cpp",
         "forward_list": "cpp",
-        "cstdarg": "cpp"
+        "cstdarg": "cpp",
+        "coroutine": "cpp"
     }
 }
