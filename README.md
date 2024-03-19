@@ -23,7 +23,7 @@ Data structures and algorithms based on C++ 20 standard
     * [NonCopyable](#NonCopyable) : interface for non-copyable classes
     * [t_bit.hpp](#t_bit.hpp) : contains useful bit structures and unions
 
-* ### Template classes
+* ### [Template classes](./docs/template.md#Template-Classes)
     * [FixedArr](#FixedArr) : simple fixed sized array type
     * [DynamicArr](#DynamicArr) : array that with dynamic size
         * [ArrBuffer](#ArrBuffer) : array that can manage its storage and grow
