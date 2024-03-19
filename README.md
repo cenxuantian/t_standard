@@ -10,12 +10,12 @@ Data structures and algorithms based on C++ 20 standard
 
 # Menu
 ### **Meta functions & structs & constexprs**
-* [t_meta.hpp](#t_meta\.hpp) : Useful meta funtions and variables
-* [t_coroutine.hpp](#t_coroutine.hpp) : Useful Coroutine templates
+* [t_meta.hpp](../t_standard/basic/t_meta.hpp) : Useful meta funtions and variables
+* [t_coroutine.hpp](../t_standard/basic/t_coroutine.hpp) : Useful Coroutine templates
 
 ### **Algorithms**
-* [t_math.hpp](#t_meta\.hpp) : math functions
-* [t_sort.hpp](#t_meta\.hpp) : sort functions
+* [t_math.hpp](../t_standard/algorithm/t_math.hpp) : math functions
+* [t_sort.hpp](../t_standard/algorithm/t_sort.hpp) : sort functions
 
 ### **Classes**
 * ### basic classes
