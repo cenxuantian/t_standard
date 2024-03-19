@@ -1,83 +1,16 @@
 #pragma once
 #include "../algorithm/t_math.hpp"
 #include "../basic/t_class_helper.h"
+#include "t_tree_node.hpp"
+#include "t_tree_iter.hpp"
 #include <iostream>
 #include <functional>
 
 namespace tcx{
-using usize = unsigned long long;
 
+// pre def
 template<typename T>
-struct BinaryTreeNode{
-    T* data;
-    BinaryTreeNode* lchild;
-    BinaryTreeNode* rchild;
-    BinaryTreeNode* parent;
-};
-
-template<typename T,bool _traverse_lchild, bool _traverse_rchild, bool _traverse_parent, bool _traverse_self>
-void __post_traverse(BinaryTreeNode<T>* node, std::function<void(BinaryTreeNode<T>*)> const& func){
-    if(node){
-        // right
-        if constexpr (_traverse_rchild){
-            if(node->rchild){
-                func(node->rchild);
-                __post_traverse<T,true,true,false,false>(node->rchild,func);
-            }
-        }
-
-        
-        // self
-        if constexpr(_traverse_self){
-            func(node);
-        }
-
-        // left
-        if constexpr (_traverse_lchild){
-            if(node->lchild){
-                __post_traverse<T,true,true,false,true>(node->lchild,func);
-            }
-        }
-
-        // parent
-        if constexpr (_traverse_parent){
-            __post_traverse<T,true,false,true,true>(node->parent,func);
-        }
-    }
-}
-
-template<typename T,bool _traverse_lchild, bool _traverse_rchild, bool _traverse_parent, bool _traverse_self>
-void __mid_traverse(BinaryTreeNode<T>* node, std::function<void(BinaryTreeNode<T>*)> const& func){
-    if(node){
-        // left
-        if constexpr (_traverse_lchild){
-            if(node->lchild){
-                func(node->lchild);
-                __mid_traverse<T,true,true,false,false>(node->lchild,func);
-            }
-        }
-
-        // self
-        if constexpr(_traverse_self){
-            func(node);
-        }
-        
-        // right
-        if constexpr (_traverse_rchild){
-            if(node->rchild){
-                __mid_traverse<T,true,true,false,true>(node->rchild,func);
-            }
-        }
-
-        // parent
-        if constexpr (_traverse_parent){
-            __mid_traverse<T,false,true,true,true>(node->parent,func);
-        }
-    }
-}
-
-template<typename T>
-// reqiure_compareble
+requires(__is_comparable_v<T>)
 class SearchBinaryTree :public NonCopyble {
 // left smaller right bigger
 public:
@@ -122,7 +55,7 @@ public:
 
     SearchBinaryTree copy() noexcept{
         SearchBinaryTree res;
-        this->post_traverse([&res](T const& i){
+        this->root_traverse([&res](T const& i){
             T each{i};
             res.emplace(std::move(each));
         });
@@ -142,7 +75,7 @@ public:
             bool right_changed = false;
             while (1)
             {
-                if(compare(*cur_comp->data,*new_node->data) >=0){
+                if(compare<__Faster_func_param_t<T>>(*cur_comp->data,*new_node->data) >=0){
                     // move to left
                     if(!left_changed)left_changed=true;
                     if(cur_comp->lchild){
@@ -177,6 +110,38 @@ public:
         ++size_;
     }
 
+    SearchBinaryTreeIter<T> begin(){
+        return {min_,__co_LSRP_traverse<T,true,true,true>};
+    }
+
+    SearchBinaryTreeIter<T> end() noexcept{
+        return {nullptr,__co_LSRP_traverse<T,true,true,true>};
+    }
+
+    SearchBinaryTreeConstIter<T> begin() const{
+        return {min_,__co_LSRP_traverse<T,true,true,true>};
+    }
+
+    SearchBinaryTreeConstIter<T> end()  const noexcept{
+        return {nullptr,__co_LSRP_traverse<T,true,true,true>};
+    }
+
+    SearchBinaryTreeIter<T> rbegin(){
+        return {max_,__co_RSLP_traverse<T,true,true,true>};
+    }
+
+    SearchBinaryTreeIter<T> rend() noexcept{
+        return {nullptr,__co_RSLP_traverse<T,true,true,true>};
+    }
+
+    SearchBinaryTreeConstIter<T> rbegin() const{
+        return {max_,__co_RSLP_traverse<T,true,true,true>};
+    }
+
+    SearchBinaryTreeConstIter<T> rend()  const noexcept{
+        return {nullptr,__co_RSLP_traverse<T,true,true,true>};
+    }
+
     const T& min() const noexcept{
         return *(min_->data);
     }
@@ -185,26 +150,38 @@ public:
         return *(max_->data);
     }
 
-    void mid_traverse(std::function<void(T&)> const& func){
-        __mid_traverse<T,true,true,true,true>(min_,[&func](BinaryTreeNode<T>* _node){
+    void inc_traverse(std::function<void(T&)> const& func){
+        __LSRP_traverse<T,true,true,true>(min_,[&func](BinaryTreeNode<T>* _node){
             func(*(_node->data));
         });
     }
 
-    void mid_traverse(std::function<void(T const&)> const& func) const{
-        __mid_traverse<T,true,true,true,true>(min_,[&func](BinaryTreeNode<T>* _node){
+    void inc_traverse(std::function<void(T const&)> const& func) const{
+        __LSRP_traverse<T,true,true,true>(min_,[&func](BinaryTreeNode<T>* _node){
             func(*(_node->data));
         });
     }
 
-    void post_traverse(std::function<void(T&)> const& func){
-        __post_traverse<T,true,true,true,true>(max_,[&func](BinaryTreeNode<T>* _node){
+    void dec_traverse(std::function<void(T&)> const& func){
+        __RSLP_traverse<T,true,true,true>(max_,[&func](BinaryTreeNode<T>* _node){
             func(*(_node->data));
         });
     }
 
-    void post_traverse(std::function<void(T const&)> const& func) const{
-        __post_traverse<T,true,true,true,true>(max_,[&func](BinaryTreeNode<T>* _node){
+    void dec_traverse(std::function<void(T const&)> const& func) const{
+        __RSLP_traverse<T,true,true,true>(max_,[&func](BinaryTreeNode<T>* _node){
+            func(*(_node->data));
+        });
+    }
+
+    void root_traverse(std::function<void(T&)> const& func){
+        __PSLR_traverse<T,true,true,true>(min_,[&func](BinaryTreeNode<T>* _node){
+            func(*(_node->data));
+        });
+    }
+
+    void root_traverse(std::function<void(T const&)> const& func) const{
+        __PSLR_traverse<T,true,true,true>(min_,[&func](BinaryTreeNode<T>* _node){
             func(*(_node->data));
         });
     }

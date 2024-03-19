@@ -22,8 +22,8 @@ struct DoubleNode{
 
 template<typename T>
 constexpr bool __check_is_node_type(){
-    if constexpr (__has_content_type<T>){
-        return __belongs_to<T(
+    if constexpr (__has_content_type_v<T>){
+        return __belongs_to_v<T(
             SingleNode<typename T::ContentType>,
             DoubleNode<typename T::ContentType>
         )>;
@@ -34,8 +34,8 @@ constexpr bool __check_is_node_type(){
 
 template<typename T>
 constexpr bool __check_is_SingleNode_type(){
-    if constexpr (__has_content_type<T>){
-        return __belongs_to<T(
+    if constexpr (__has_content_type_v<T>){
+        return __belongs_to_v<T(
             SingleNode<typename T::ContentType>
         )>;
     }else{
@@ -45,8 +45,8 @@ constexpr bool __check_is_SingleNode_type(){
 
 template<typename T>
 constexpr bool __check_is_DoubleNode_type(){
-    if constexpr (__has_content_type<T>){
-        return __belongs_to<T(
+    if constexpr (__has_content_type_v<T>){
+        return __belongs_to_v<T(
             DoubleNode<typename T::ContentType>
         )>;
     }else{

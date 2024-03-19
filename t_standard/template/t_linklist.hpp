@@ -209,17 +209,17 @@ public:
 
     // O(n) !!!
     LinkListIter<Node_t> find(T const& _tar) noexcept
-    requires(__is_eq_comparable<T>)
+    requires(__is_eq_comparable_v<T>)
     {
         auto b = this->begin();
         auto e = this->end();
         while(b!=e){
-            if constexpr(__has_opr_eq<T>){
+            if constexpr(__has_opr_eq_v<T>){
                 if(*b == _tar){
                     return b;
                 }
             }
-            else if constexpr(__has_opr_ineq<T>){
+            else if constexpr(__has_opr_ineq_v<T>){
                 if(!(*b!=_tar)){
                     return b;
                 }
@@ -231,17 +231,17 @@ public:
 
     // O(n) !!!
     LinkListIterConst<Node_t> find(T const& _tar) const noexcept
-    requires(__is_eq_comparable<T>)
+    requires(__is_eq_comparable_v<T>)
     {
         auto b = this->begin();
         auto e = this->end();
         while(b!=e){
-            if constexpr(__has_opr_eq<T>){
+            if constexpr(__has_opr_eq_v<T>){
                 if(*b == _tar){
                     return b;
                 }
             }
-            else if constexpr(__has_opr_ineq<T>){
+            else if constexpr(__has_opr_ineq_v<T>){
                 if(!(*b!=_tar)){
                     return b;
                 }

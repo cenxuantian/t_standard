@@ -4,7 +4,7 @@
 namespace tcx{
 
 template<class C>
-requires(__has_content_type<C>)
+requires(__has_content_type_v<C>)
 class TemplateIterTraits{
 public:
     using OwnerType = C;
@@ -19,7 +19,7 @@ protected:
 };
 
 template<class C>
-requires(__has_content_type<C>)
+requires(__has_content_type_v<C>)
 class TemplateIterConstTraits{
 public:
     using OwnerType = C;

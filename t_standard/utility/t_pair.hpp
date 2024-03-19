@@ -4,7 +4,7 @@
 namespace tcx
 {
 template<typename T1,typename T2>
-requires(__completely_moveable<T1,T2>)
+requires(__completely_moveable_v<T1,T2>)
 class Pair : public NonCopyble{
 public:
     T1 first;
