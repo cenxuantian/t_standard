@@ -5,11 +5,11 @@
 namespace tcx{
 
 template<typename T>
-class OnlyInitSusCoro{
+class OnlyFinalSusCoro{
 public:
     struct promise_type{
-        OnlyInitSusCoro get_return_object(){
-            return OnlyInitSusCoro(std::coroutine_handle<promise_type>::from_promise(*this));
+        OnlyFinalSusCoro get_return_object(){
+            return OnlyFinalSusCoro(std::coroutine_handle<promise_type>::from_promise(*this));
         }
         auto initial_suspend()noexcept {return std::suspend_never{};};
         auto final_suspend()noexcept {return std::suspend_always{};};
@@ -19,8 +19,8 @@ public:
     };
 
     std::coroutine_handle<promise_type> handle;
-    explicit OnlyInitSusCoro(std::coroutine_handle<promise_type> const& h):handle(h){}
-    ~OnlyInitSusCoro(){handle.destroy();}
+    explicit OnlyFinalSusCoro(std::coroutine_handle<promise_type> const& h):handle(h){}
+    ~OnlyFinalSusCoro(){handle.destroy();}
 };
 
 }

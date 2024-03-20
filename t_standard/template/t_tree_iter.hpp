@@ -8,10 +8,10 @@ namespace tcx
 {
 
 template<typename T>
-class SearchBinaryTreeIter {
+class SearchBinaryTreeIter :public NonCopyble,NonMoveable{
 public:
-    SearchBinaryTreeIter(BinaryTreeNode<T>* start, OnlyInitSusCoro<T>(*coro_ini_func)(BinaryTreeNode<T>*, void*))
-    noexcept :co_(coro_ini_func(start,this)),cur_(nullptr){};
+    SearchBinaryTreeIter(BinaryTreeNode<T>* start, OnlyFinalSusCoro<T>(*coro_ini_func)(BinaryTreeNode<T>*, void*))
+    noexcept :cur_(nullptr),co_(coro_ini_func(start,this)){};
 
     SearchBinaryTreeIter<T>& operator++(){
         co_.handle.resume();
@@ -23,16 +23,21 @@ public:
     bool operator!=(SearchBinaryTreeIter<T> const& _other) {
         return _other.cur_ != cur_;
     }
+    bool operator==(SearchBinaryTreeIter<T> const& _other) {
+        return _other.cur_ == cur_;
+    }
     BinaryTreeNode<T>* cur_;
 private:
-    OnlyInitSusCoro<T> co_;
+    OnlyFinalSusCoro<T> co_;
+
+
 };
 
 template<typename T>
 class SearchBinaryTreeConstIter {
 public:
-    SearchBinaryTreeConstIter(BinaryTreeNode<T>* start, OnlyInitSusCoro<T>(*coro_ini_func)(BinaryTreeNode<T>*, void*))
-    noexcept :co_(coro_ini_func(start,this)),cur_(nullptr){};
+    SearchBinaryTreeConstIter(const BinaryTreeNode<T>* start, OnlyFinalSusCoro<T>(*coro_ini_func)(BinaryTreeNode<T>*, void*))
+    noexcept :cur_(nullptr),co_(coro_ini_func(const_cast<BinaryTreeNode<T>*>(start),this)){};
 
     SearchBinaryTreeConstIter<T>& operator++(){
         co_.handle.resume();
@@ -44,9 +49,12 @@ public:
     bool operator!=(SearchBinaryTreeConstIter<T> const& _other) {
         return _other.cur_ != cur_;
     }
+    bool operator==(SearchBinaryTreeConstIter<T> const& _other) {
+        return _other.cur_ == cur_;
+    }
     const BinaryTreeNode<T>* cur_;
 private:
-    OnlyInitSusCoro<T> co_;
+    OnlyFinalSusCoro<T> co_;
 };
 
 // normal traverse functions
@@ -66,15 +74,15 @@ void __PSLR_traverse(BinaryTreeNode<T>* node, std::function<void(BinaryTreeNode<
             }
         }
 
+        // self
+        func(node);
+
         // left
         if constexpr (_traverse_lchild){
             if(node->lchild){
                 __PSLR_traverse<T,true,true,false>(node->lchild,func);
             }
         }
-
-        // self
-        func(node);
 
         // right
         if constexpr (_traverse_rchild){
@@ -143,7 +151,7 @@ void __LSRP_traverse(BinaryTreeNode<T>* node, std::function<void(BinaryTreeNode<
 
 // left -> self -> right -> parent
 template<typename T,bool _traverse_lchild, bool _traverse_rchild, bool _traverse_parent>
-OnlyInitSusCoro<T> __co_LSRP_traverse(BinaryTreeNode<T>* node, void* _ctx){
+OnlyFinalSusCoro<T> __co_LSRP_traverse(BinaryTreeNode<T>* node, void* _ctx){
     if(node){
         // left
         if constexpr (_traverse_lchild){
@@ -184,7 +192,7 @@ OnlyInitSusCoro<T> __co_LSRP_traverse(BinaryTreeNode<T>* node, void* _ctx){
 
 // right -> self -> left -> parent
 template<typename T,bool _traverse_lchild, bool _traverse_rchild, bool _traverse_parent>
-OnlyInitSusCoro<T> __co_RSLP_traverse(BinaryTreeNode<T>* node, void* _ctx){
+OnlyFinalSusCoro<T> __co_RSLP_traverse(BinaryTreeNode<T>* node, void* _ctx){
     if(node){
         // right
         if constexpr (_traverse_rchild){
@@ -222,6 +230,58 @@ OnlyInitSusCoro<T> __co_RSLP_traverse(BinaryTreeNode<T>* node, void* _ctx){
         }
     }
     
+    ((SearchBinaryTreeIter<T>*)_ctx)->cur_ = nullptr;
+}
+
+// parent -> self -> left -> right
+template<typename T,bool _traverse_lchild, bool _traverse_rchild, bool _traverse_parent>
+OnlyFinalSusCoro<T> __co_PSLR_traverse(BinaryTreeNode<T>* node, void* _ctx){
+    if(node){
+        // parent
+        if constexpr (_traverse_parent){
+            if(node->parent){
+                if(node->parent->lchild == node){
+                    auto co = __co_PSLR_traverse<T,false,true,true>(node->parent,_ctx);
+                    while(!co.handle.done()){
+                        co_await std::suspend_always{};
+                        co.handle.resume();
+                    }
+                }else{
+                    auto co = __co_PSLR_traverse<T,true,false,true>(node->parent,_ctx);
+                    while(!co.handle.done()){
+                        co_await std::suspend_always{};
+                        co.handle.resume();
+                    }
+                }
+            }
+        }
+
+        // self
+        ((SearchBinaryTreeIter<T>*)_ctx)->cur_ = node;
+        co_await std::suspend_always{};
+
+        // left
+        if constexpr (_traverse_lchild){
+            if(node->lchild){
+                auto co = __co_PSLR_traverse<T,true,true,false>(node->lchild,_ctx);
+                while(!co.handle.done()){
+                    co_await std::suspend_always{};
+                    co.handle.resume();
+                }
+            }
+        }
+
+        // right
+        if constexpr (_traverse_rchild){
+            if(node->rchild){
+                auto co = __co_PSLR_traverse<T,true,true,false>(node->rchild,_ctx);
+                while(!co.handle.done()){
+                    co_await std::suspend_always{};
+                    co.handle.resume();
+                }
+            }
+        }
+    }
     ((SearchBinaryTreeIter<T>*)_ctx)->cur_ = nullptr;
 }
 
