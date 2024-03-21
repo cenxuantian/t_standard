@@ -8,6 +8,7 @@
 #include <template/t_queue.hpp>
 #include <template/t_list.hpp>
 #include <template/t_stack.hpp>
+#include <template/t_red_black_tree.hpp>
 #include <utility/t_pair.hpp>
 #include <utility/t_bit.hpp>
 #include <algorithm/t_math.hpp>
@@ -20,17 +21,17 @@ using namespace tcx;
 
 int main(int, char**){
     // create the object
-    SearchBinaryTree<int> t;
-    t.emplace(10);
-    t.emplace(8);
-    t.emplace(11);
-    t.emplace(50);
-    t.emplace(12);
-    t.emplace(1);
-    t.emplace(22);
+    RedBlackTree<int> t;
+    t.emplace_(10);
+    t.emplace_(8);
+    t.emplace_(11);
+    t.emplace_(50);
+    t.emplace_(12);
+    t.emplace_(1);
+    t.emplace_(22);
 
     for(const auto & i : t){
-        std::cout << i <<' ';
+        std::cout << i.data <<' ';
     }
 
     // t.post_traverse([](int const& each){

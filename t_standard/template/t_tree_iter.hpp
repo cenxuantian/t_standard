@@ -17,7 +17,7 @@ public:
         co_.handle.resume();
         return *this;
     };
-    T& operator*()  {
+    auto& operator*()  {
         return *(cur_->data);
     };
     bool operator!=(SearchBinaryTreeIter<T> const& _other) {
