@@ -78,7 +78,7 @@ public:
             goto loop;
         }
         
-        // situation 4
+        // situation 4  : father is red uncle is black or null
         if(Father_t::__is_a_lchild(parent)){
             if(Father_t::__is_a_lchild(new_node)){
                 // ll

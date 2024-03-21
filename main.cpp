@@ -26,9 +26,9 @@ int main(int, char**){
     t.emplace(8);
     t.emplace(11);
     t.emplace(50);
-    // t.emplace(12);
-    // t.emplace(1);
-    // t.emplace(22);
+    t.emplace(12);
+    t.emplace(1);
+    t.emplace(22);
 
     for(const auto & i : t){
         std::cout << i <<' ';

@@ -328,7 +328,7 @@ protected:
             }else{
                 origi_p->rchild = node->lchild;
                 origi_p->rchild->parent = origi_p;
-                node->rchild = origi_p->rchild->rchild;
+                node->lchild = origi_p->rchild->rchild;
                 node->parent =origi_p->rchild;
                 origi_p->rchild->rchild = node;
             }
