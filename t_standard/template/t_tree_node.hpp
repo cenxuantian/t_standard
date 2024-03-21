@@ -10,9 +10,6 @@ enum class RedBlackTreeColor: char{
 
 
 template<typename T>
-struct __RedBlackTreeItem{};
-
-template<typename T>
 struct BinaryTreeNode{
     using Data_t = T;
     T* data;
@@ -23,12 +20,12 @@ struct BinaryTreeNode{
 
 
 template<typename T>
-struct BinaryTreeNode<__RedBlackTreeItem<T>>{
+struct RedBlackTreeNode{
     using Data_t = T;
     T* data;
-    BinaryTreeNode* lchild;
-    BinaryTreeNode* rchild;
-    BinaryTreeNode* parent;
+    RedBlackTreeNode* lchild;
+    RedBlackTreeNode* rchild;
+    RedBlackTreeNode* parent;
     RedBlackTreeColor color;    // color
 };
 

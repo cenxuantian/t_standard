@@ -22,16 +22,16 @@ using namespace tcx;
 int main(int, char**){
     // create the object
     RedBlackTree<int> t;
-    t.emplace_(10);
-    t.emplace_(8);
-    t.emplace_(11);
-    t.emplace_(50);
-    t.emplace_(12);
-    t.emplace_(1);
-    t.emplace_(22);
+    t.emplace(10);
+    t.emplace(8);
+    t.emplace(11);
+    t.emplace(50);
+    // t.emplace(12);
+    // t.emplace(1);
+    // t.emplace(22);
 
     for(const auto & i : t){
-        std::cout << i.data <<' ';
+        std::cout << i <<' ';
     }
 
     // t.post_traverse([](int const& each){

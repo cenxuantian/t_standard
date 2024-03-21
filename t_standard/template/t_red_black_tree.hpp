@@ -9,12 +9,12 @@ namespace tcx
 
 template<typename T>
 requires(__is_comparable_v<T>)
-class RedBlackTree : public SearchBinaryTree<__RedBlackTreeItem<T>>{
+class RedBlackTree : public SearchBinaryTree<RedBlackTreeNode<T>>{
 public:
 
     using Self_t = RedBlackTree<T>;
-    using Father_t = SearchBinaryTree<__RedBlackTreeItem<T>>;
-    using Node_t = BinaryTreeNode<__RedBlackTreeItem<T>>;
+    using Father_t = SearchBinaryTree<RedBlackTreeNode<T>>;
+    using Node_t = RedBlackTreeNode<T>;
     
     RedBlackTree():Father_t(){}
 

@@ -10,14 +10,12 @@
 namespace tcx{
 
 // pre def
-template<typename T>
-requires(__is_comparable_v<T>)
+template<typename Node_t>
+requires(__is_comparable_v<typename Node_t::Data_t>)
 class SearchBinaryTree :public NonCopyble {
 // left smaller right bigger
 public:
-
-    using Node_t = BinaryTreeNode<T>;
-    using Data_t = Node_t::Data_t;
+    using T = Node_t::Data_t;
 
     SearchBinaryTree(){}
 
@@ -62,36 +60,36 @@ public:
         return res.move();
     }
 
-    SearchBinaryTreeIter<T> begin() noexcept{
-        return {root_,__co_LSRP_traverse<T,true,true,true>};
+    SearchBinaryTreeIter<Node_t> begin() noexcept{
+        return {root_,__co_LSRP_traverse<Node_t,true,true,true>};
     }
 
-    SearchBinaryTreeIter<T> end() noexcept{
-        return {nullptr,__co_LSRP_traverse<T,true,true,true>};
+    SearchBinaryTreeIter<Node_t> end() noexcept{
+        return {nullptr,__co_LSRP_traverse<Node_t,true,true,true>};
     }
 
-    SearchBinaryTreeConstIter<T> begin() const noexcept{
-        return {root_,__co_LSRP_traverse<T,true,true,true>};
+    SearchBinaryTreeConstIter<Node_t> begin() const noexcept{
+        return {root_,__co_LSRP_traverse<Node_t,true,true,true>};
     }
 
-    SearchBinaryTreeConstIter<T> end()  const noexcept{
-        return {nullptr,__co_LSRP_traverse<T,true,true,true>};
+    SearchBinaryTreeConstIter<Node_t> end()  const noexcept{
+        return {nullptr,__co_LSRP_traverse<Node_t,true,true,true>};
     }
 
-    SearchBinaryTreeIter<T> rbegin() noexcept{
-        return {root_,__co_RSLP_traverse<T,true,true,true>};
+    SearchBinaryTreeIter<Node_t> rbegin() noexcept{
+        return {root_,__co_RSLP_traverse<Node_t,true,true,true>};
     }
 
-    SearchBinaryTreeIter<T> rend() noexcept{
+    SearchBinaryTreeIter<Node_t> rend() noexcept{
         return {nullptr,__co_RSLP_traverse<T,true,true,true>};
     }
 
-    SearchBinaryTreeConstIter<T> rbegin() const noexcept{
+    SearchBinaryTreeConstIter<Node_t> rbegin() const noexcept{
         return {root_,__co_RSLP_traverse<T,true,true,true>};
     }
 
-    SearchBinaryTreeConstIter<T> rend()  const noexcept{
-        return {nullptr,__co_RSLP_traverse<T,true,true,true>};
+    SearchBinaryTreeConstIter<Node_t> rend()  const noexcept{
+        return {nullptr,__co_RSLP_traverse<Node_t,true,true,true>};
     }
 
     const T& min() const noexcept{
@@ -157,7 +155,7 @@ public:
         ++size_;
     }
 
-    SearchBinaryTreeConstIter<T> find(__Faster_func_param_t<T> item) const noexcept{
+    SearchBinaryTreeConstIter<Node_t> find(__Faster_func_param_t<T> item) const noexcept{
         auto cur = root_;
         loop:
         if(cur){
@@ -185,8 +183,8 @@ public:
 
     template<typename IterType>
     void erase(IterType&& iter){
-        if constexpr(!__belongs_to_v<std::decay_t<IterType>(SearchBinaryTreeConstIter<T>,SearchBinaryTreeIter<T>)>){
-            static_assert(false,"IterType must be SearchBinaryTreeConstIter<T> or SearchBinaryTreeIter<T>");
+        if constexpr(!__belongs_to_v<std::decay_t<IterType>(SearchBinaryTreeConstIter<Node_t>,SearchBinaryTreeIter<Node_t>)>){
+            static_assert(false,"IterType must be SearchBinaryTreeConstIter<Node_t> or SearchBinaryTreeIter<Node_t>");
         }
         auto node = iter.cur_;
         iter.cur_ = nullptr;    // set iter to end
