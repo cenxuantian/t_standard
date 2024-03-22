@@ -9,8 +9,14 @@
 
 namespace tcx{
 
+enum class HowToDealWithDuplicate{
+    AS_ERROR = 0,
+    TO_LEFT = 1,
+    TO_RIGHT = 2
+};
+
 // pre def
-template<typename Node_t>
+template<typename Node_t, HowToDealWithDuplicate how_to_deal_with_duplicate = HowToDealWithDuplicate::TO_LEFT>
 requires(__is_comparable_v<typename Node_t::Data_t>)
 class SearchBinaryTree :public NonCopyble {
 // left smaller right bigger
@@ -145,14 +151,15 @@ public:
     }
 
     template<typename ...Args>
-    void emplace(Args&&... args) noexcept{
+    bool emplace(Args&&... args) noexcept{
         auto new_node = __alloc_new_node(std::forward<Args&&>(args)...);
         if(empty()){
             root_ = new_node;
-        }else{
-            __add_new_node(new_node);
         }
-        ++size_;
+        if(__add_new_node(new_node)){
+            ++size_;
+            return true;
+        }else return false;
     }
 
     SearchBinaryTreeConstIter<Node_t> find(__Faster_func_param_t<T> item) const noexcept{
@@ -161,24 +168,24 @@ public:
         if(cur){
             int comp_res = compare<__Faster_func_param_t<T>>(*(cur->data),item);
             if(comp_res == 0){
-                return {cur,__co_PSLR_traverse<T,true,true,false>};
+                return {cur,__co_PSLR_traverse<Node_t,true,true,false>};
             }else if(comp_res>0){
                 if(cur->lchild){
                     cur = cur->lchild;
                     goto loop;
                 }else{
-                    return {nullptr,__co_PSLR_traverse<T,false,false,false>};
+                    return {nullptr,__co_PSLR_traverse<Node_t,false,false,false>};
                 }
             }else{
                 if(cur->rchild){
                     cur = cur->rchild;
                     goto loop;
                 }else{
-                    return {nullptr,__co_PSLR_traverse<T,false,false,false>};
+                    return {nullptr,__co_PSLR_traverse<Node_t,false,false,false>};
                 }
             }
         }
-        else return {nullptr,__co_PSLR_traverse<T,false,false,false>};
+        else return {nullptr,__co_PSLR_traverse<Node_t,false,false,false>};
     }
 
     template<typename IterType>
@@ -341,12 +348,17 @@ protected:
         }
     }
     
+    virtual inline int __compare(Node_t* _1, Node_t* _2) noexcept{
+        return compare<__Faster_func_param_t<decltype(*(_1->data))>>(*(_1->data),*(_2->data));
+    }
+
     // add a new node into suitable position
-    void __add_new_node(Node_t* new_node) noexcept{
+    bool __add_new_node(Node_t* new_node) noexcept{
         Node_t* cur_comp = this->root_;
         while (1)
         {
-            if(compare<__Faster_func_param_t<decltype(*(cur_comp->data))>>(*(cur_comp->data),*(new_node->data)) >=0){
+            int comp_res = __compare(cur_comp,new_node);
+            if(comp_res >0){
                 // move to left
                 if(cur_comp->lchild){
                     cur_comp = cur_comp->lchild;
@@ -354,9 +366,9 @@ protected:
                 }else{
                     cur_comp->lchild = new_node;
                     new_node->parent = cur_comp;
-                    break;
+                    return true;
                 }
-            }else{
+            }else if(comp_res < 0){
                 // move to right
                 if(cur_comp->rchild){
                     cur_comp = cur_comp->rchild;
@@ -364,7 +376,30 @@ protected:
                 }else{
                     cur_comp->rchild = new_node;
                     new_node->parent = cur_comp;
-                    break;
+                    return true;
+                }
+            }else{
+                if constexpr(how_to_deal_with_duplicate == HowToDealWithDuplicate::AS_ERROR) return false;
+                else if constexpr(how_to_deal_with_duplicate == HowToDealWithDuplicate::TO_LEFT){
+                    // move to left
+                    if(cur_comp->lchild){
+                        cur_comp = cur_comp->lchild;
+                        continue;
+                    }else{
+                        cur_comp->lchild = new_node;
+                        new_node->parent = cur_comp;
+                        return true;
+                    }
+                }else{
+                    // move to right
+                    if(cur_comp->rchild){
+                        cur_comp = cur_comp->rchild;
+                        continue;
+                    }else{
+                        cur_comp->rchild = new_node;
+                        new_node->parent = cur_comp;
+                        return true;
+                    }
                 }
             }
         }
