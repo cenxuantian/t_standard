@@ -12,7 +12,7 @@ public:
 
     Pair(T1&& _d1, T2&& _d2)
     :first(std::forward<T1&&>(_d1))
-    ,second(std::forward<T1&&>(_d2)){}
+    ,second(std::forward<T2&&>(_d2)){}
 
     Pair(Pair&& _other) noexcept {
         first = std::move(_other.first);
@@ -35,7 +35,15 @@ public:
 
     ~Pair(){}
     
-
+    bool operator>(Pair<T1,T2> const& other)const noexcept{
+        return compare<__Faster_func_param_t<T1>>(this->first,other.first)>0;
+    }
+    bool operator<(Pair<T1,T2> const& other)const noexcept{
+        return compare<__Faster_func_param_t<T1>>(this->first,other.first)<0;
+    }
+    bool operator==(Pair<T1,T2> const& other)const noexcept{
+        return compare<__Faster_func_param_t<T1>>(this->first,other.first)==0;
+    }
 
 
 };

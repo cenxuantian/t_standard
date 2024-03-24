@@ -8,7 +8,6 @@ namespace tcx
 
 
 template<typename T, HowToDealWithDuplicate how_to_deal_with_duplicate = HowToDealWithDuplicate::TO_LEFT>
-requires(__is_comparable_v<T>)
 class RedBlackTree : public SearchBinaryTree<RedBlackTreeNode<T>,how_to_deal_with_duplicate>{
 public:
 
@@ -19,6 +18,18 @@ public:
     RedBlackTree():Father_t(){}
 
     RedBlackTree(RedBlackTree&& other):Father_t(std::forward<RedBlackTree&&>(other)){}
+    RedBlackTree(Father_t&& other):Father_t(std::forward<Father_t&&>(other)){}
+
+
+    RedBlackTree& operator=(RedBlackTree&& other) noexcept
+    {
+        this->Father_t::operator=(std::forward<RedBlackTree&&>(other));
+    }
+
+    RedBlackTree copy()noexcept{
+        return this->Father_t::copy();
+    }
+
 
     template<typename ...Args>
     bool emplace(Args&& ...args) noexcept{

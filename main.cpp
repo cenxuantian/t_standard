@@ -9,6 +9,7 @@
 #include <template/t_list.hpp>
 #include <template/t_stack.hpp>
 #include <template/t_red_black_tree.hpp>
+#include <template/t_tree_map.hpp>
 #include <utility/t_pair.hpp>
 #include <utility/t_bit.hpp>
 #include <algorithm/t_math.hpp>
@@ -21,22 +22,15 @@ using namespace tcx;
 
 int main(int, char**){
     // create the object
-    RedBlackTree<int> t;
-    t.emplace(10);
-    t.emplace(8);
-    t.emplace(11);
-    t.emplace(50);
-    t.emplace(12);
-    t.emplace(1);
-    t.emplace(22);
+    TreeMap<std::string,int> m;
+    m.emplace("b",10);
+    m.emplace("a",100);
 
-    for(const auto & i : t){
-        std::cout << i <<' ';
-    }
+    m["a"] = 60;
 
-    // t.post_traverse([](int const& each){
-    //     std::cout << each<<'\n';
-    // });
+    m.inc_traverse([](const auto& each){
+        std::cout << each.first <<':' << each.second<<'\n';
+    });
 
     return 0;
 

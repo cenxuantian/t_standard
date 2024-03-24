@@ -17,7 +17,6 @@ enum class HowToDealWithDuplicate{
 
 // pre def
 template<typename Node_t, HowToDealWithDuplicate how_to_deal_with_duplicate = HowToDealWithDuplicate::TO_LEFT>
-requires(__is_comparable_v<typename Node_t::Data_t>)
 class SearchBinaryTree :public NonCopyble {
 // left smaller right bigger
 public:
@@ -36,20 +35,14 @@ public:
     ,size_(other.size_)
     {
         other.root_ = nullptr;
-        other.min_ = nullptr;
-        other.max_ = nullptr;
         other.size_ = 0;
     }
 
     SearchBinaryTree& operator=(SearchBinaryTree&& other)noexcept{
         __free_node_and_children(root_);
         this->root_  = other.root_;
-        this->min_ =   other.min_;
-        this->max_ =   other.max_;
         this->size_ =  other.size_;
         other.root_ = nullptr;
-        other.min_ = nullptr;
-        other.max_ = nullptr;
         other.size_ = 0;
     }
 
@@ -115,37 +108,37 @@ public:
     }
 
     void inc_traverse(std::function<void(T&)> const& func) noexcept{
-        __LSRP_traverse<T,true,true,true>(root_,[&func](Node_t* _node){
+        __LSRP_traverse<Node_t,true,true,true>(root_,[&func](Node_t* _node){
             func(*(_node->data));
         });
     }
 
     void inc_traverse(std::function<void(T const&)> const& func) const noexcept{
-        __LSRP_traverse<T,true,true,true>(root_,[&func](Node_t* _node){
+        __LSRP_traverse<Node_t,true,true,true>(root_,[&func](Node_t* _node){
             func(*(_node->data));
         });
     }
 
     void dec_traverse(std::function<void(T&)> const& func)noexcept{
-        __RSLP_traverse<T,true,true,true>(root_,[&func](Node_t* _node){
+        __RSLP_traverse<Node_t,true,true,true>(root_,[&func](Node_t* _node){
             func(*(_node->data));
         });
     }
 
     void dec_traverse(std::function<void(T const&)> const& func) const noexcept{
-        __RSLP_traverse<T,true,true,true>(root_,[&func](Node_t* _node){
+        __RSLP_traverse<Node_t,true,true,true>(root_,[&func](Node_t* _node){
             func(*(_node->data));
         });
     }
 
     void root_traverse(std::function<void(T&)> const& func)noexcept{
-        __PSLR_traverse<T,true,true,true>(root_,[&func](Node_t* _node){
+        __PSLR_traverse<Node_t,true,true,true>(root_,[&func](Node_t* _node){
             func(*(_node->data));
         });
     }
 
     void root_traverse(std::function<void(T const&)> const& func) const noexcept{
-        __PSLR_traverse<T,true,true,true>(root_,[&func](Node_t* _node){
+        __PSLR_traverse<Node_t,true,true,true>(root_,[&func](Node_t* _node){
             func(*(_node->data));
         });
     }
@@ -166,7 +159,7 @@ public:
         auto cur = root_;
         loop:
         if(cur){
-            int comp_res = compare<__Faster_func_param_t<T>>(*(cur->data),item);
+            int comp_res = this->__compare_value(*(cur->data),item);
             if(comp_res == 0){
                 return {cur,__co_PSLR_traverse<Node_t,true,true,false>};
             }else if(comp_res>0){
@@ -348,8 +341,12 @@ protected:
         }
     }
     
-    virtual inline int __compare(Node_t* _1, Node_t* _2) noexcept{
+    virtual inline int __compare_node(Node_t* _1, Node_t* _2) noexcept{
         return compare<__Faster_func_param_t<decltype(*(_1->data))>>(*(_1->data),*(_2->data));
+    }
+
+    virtual inline int __compare_value(__Faster_func_param_t<T> _1, __Faster_func_param_t<T> _2) noexcept{
+        return compare<__Faster_func_param_t<T>>(_1,_2);
     }
 
     // add a new node into suitable position
@@ -357,7 +354,7 @@ protected:
         Node_t* cur_comp = this->root_;
         while (1)
         {
-            int comp_res = __compare(cur_comp,new_node);
+            int comp_res = this->__compare_node(cur_comp,new_node);
             if(comp_res >0){
                 // move to left
                 if(cur_comp->lchild){

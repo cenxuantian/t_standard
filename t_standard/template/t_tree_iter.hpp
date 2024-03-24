@@ -61,16 +61,16 @@ private:
 // normal traverse functions
 
 // parent -> self -> left -> right
-template<typename T,bool _traverse_lchild, bool _traverse_rchild, bool _traverse_parent>
-void __PSLR_traverse(BinaryTreeNode<T>* node, std::function<void(BinaryTreeNode<T>*)> const& func){
+template<typename Node_t,bool _traverse_lchild, bool _traverse_rchild, bool _traverse_parent>
+void __PSLR_traverse(Node_t* node, std::function<void(Node_t*)> const& func){
     if(node){
         // parent
         if constexpr (_traverse_parent){
             if(node->parent){
                 if(node->parent->lchild == node){
-                    __PSLR_traverse<T,false,true,true>(node->parent,func);
+                    __PSLR_traverse<Node_t,false,true,true>(node->parent,func);
                 }else{
-                    __PSLR_traverse<T,true,false,true>(node->parent,func);
+                    __PSLR_traverse<Node_t,true,false,true>(node->parent,func);
                 }
             }
         }
@@ -81,27 +81,27 @@ void __PSLR_traverse(BinaryTreeNode<T>* node, std::function<void(BinaryTreeNode<
         // left
         if constexpr (_traverse_lchild){
             if(node->lchild){
-                __PSLR_traverse<T,true,true,false>(node->lchild,func);
+                __PSLR_traverse<Node_t,true,true,false>(node->lchild,func);
             }
         }
 
         // right
         if constexpr (_traverse_rchild){
             if(node->rchild){
-                __PSLR_traverse<T,true,true,false>(node->rchild,func);
+                __PSLR_traverse<Node_t,true,true,false>(node->rchild,func);
             }
         }
     }
 }
 
 // right -> self -> left -> parent
-template<typename T,bool _traverse_lchild, bool _traverse_rchild, bool _traverse_parent>
-void __RSLP_traverse(BinaryTreeNode<T>* node, std::function<void(BinaryTreeNode<T>*)> const& func){
+template<typename Node_t,bool _traverse_lchild, bool _traverse_rchild, bool _traverse_parent>
+void __RSLP_traverse(Node_t* node, std::function<void(Node_t*)> const& func){
     if(node){
         // right
         if constexpr (_traverse_rchild){
             if(node->rchild){
-                __RSLP_traverse<T,true,true,false>(node->rchild,func);
+                __RSLP_traverse<Node_t,true,true,false>(node->rchild,func);
             }
         }
 
@@ -111,25 +111,25 @@ void __RSLP_traverse(BinaryTreeNode<T>* node, std::function<void(BinaryTreeNode<
         // left
         if constexpr (_traverse_lchild){
             if(node->lchild){
-                __RSLP_traverse<T,true,true,false>(node->lchild,func);
+                __RSLP_traverse<Node_t,true,true,false>(node->lchild,func);
             }
         }
 
         // parent
         if constexpr (_traverse_parent){
-            __RSLP_traverse<T,true,false,true>(node->parent,func);
+            __RSLP_traverse<Node_t,true,false,true>(node->parent,func);
         }
     }
 }
 
 // left -> self -> right -> parent
-template<typename T,bool _traverse_lchild, bool _traverse_rchild, bool _traverse_parent>
-void __LSRP_traverse(BinaryTreeNode<T>* node, std::function<void(BinaryTreeNode<T>*)> const& func){
+template<typename Node_t,bool _traverse_lchild, bool _traverse_rchild, bool _traverse_parent>
+void __LSRP_traverse(Node_t* node, std::function<void(Node_t*)> const& func){
     if(node){
         // left
         if constexpr (_traverse_lchild){
             if(node->lchild){
-                __LSRP_traverse<T,true,true,false>(node->lchild,func);
+                __LSRP_traverse<Node_t,true,true,false>(node->lchild,func);
             }
         }
         // self
@@ -137,12 +137,12 @@ void __LSRP_traverse(BinaryTreeNode<T>* node, std::function<void(BinaryTreeNode<
         // right
         if constexpr (_traverse_rchild){
             if(node->rchild){
-                __LSRP_traverse<T,true,true,false>(node->rchild,func);
+                __LSRP_traverse<Node_t,true,true,false>(node->rchild,func);
             }
         }
         // parent
         if constexpr (_traverse_parent){
-            __LSRP_traverse<T,false,true,true>(node->parent,func);
+            __LSRP_traverse<Node_t,false,true,true>(node->parent,func);
         }
     }
 }
